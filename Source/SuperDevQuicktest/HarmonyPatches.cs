@@ -48,12 +48,13 @@ namespace SuperDevQuicktest
                     Current.Game.World = WorldGenerator.GenerateWorld(worldMapCoverage, GenText.RandomSeedString(), OverallRainfall.Normal, OverallTemperature.Normal, OverallPopulation.Normal, LandmarkDensity.Normal);
 
                     BiomeDef biome = QuicktestUtilities.BiomeDefByName(settings.selectedBiome);
-                    Find.GameInitData.startingTile = QuicktestUtilities.FindTileForBiome(biome);
+                    Hilliness hill = settings.hillinessSelection;
+                    Find.GameInitData.startingTile = QuicktestUtilities.FindOrCreateTile(biome, hill);
 
                     int mapSize = settings.mapSize;
                     Find.GameInitData.mapSize = mapSize;
 
-                    Find.Scenario.PostIdeoChosen(); // TODO customize
+                    Find.Scenario.PostIdeoChosen(); // TODO customize,
 
                     return false;
                 }

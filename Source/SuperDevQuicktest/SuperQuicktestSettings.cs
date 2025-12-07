@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace SuperDevQuicktest
         public int mapSize = 250;
         public string selectedStoryteller = "Cassandra";
         public float worldMapCoverage = 0.05f;
+        public Hilliness hillinessSelection = Hilliness.Flat;
 
         public List<string> biomeBlackList = new List<string>
         {
@@ -34,6 +36,7 @@ namespace SuperDevQuicktest
             Scribe_Values.Look(ref mapSize, "mapSize", 250);
             Scribe_Values.Look(ref selectedStoryteller, "selectedStoryteller", "Cassandra");
             Scribe_Values.Look(ref worldMapCoverage, "worldMapCoverage", 0.05f);
+            Scribe_Values.Look(ref hillinessSelection, "hillinessSelection", Hilliness.Flat);
             base.ExposeData();
         }
     }

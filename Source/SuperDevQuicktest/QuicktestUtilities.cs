@@ -54,21 +54,59 @@ namespace SuperDevQuicktest
             return DefDatabase<StorytellerDef>.GetNamedSilentFail(defName);
         }
 
-        public static int FindTileForBiome(BiomeDef biome)
+        //public static int FindTileForBiome(BiomeDef biome)
+        //{
+        //    WorldGrid grid = Find.WorldGrid;
+        //    int tileCount = grid.TilesCount;
+
+        //    for (int i = 0; i < tileCount; i++)
+        //    {
+        //        if (grid[i].biome == biome)
+        //        {
+        //            return i;
+        //        }
+        //    }
+
+        //    Log.Error($"No world tile found with biome {biome.label}");
+        //    return TileFinder.RandomSettlementTileFor(Faction.OfPlayer);
+        //}
+
+        public static int FindOrCreateTile(BiomeDef biome, Hilliness hill)
         {
             WorldGrid grid = Find.WorldGrid;
             int tileCount = grid.TilesCount;
 
+            // Try to find tile of correct biome and hilliness
             for (int i = 0; i < tileCount; i++)
             {
-                if (grid[i].biome == biome)
+                Tile t = grid[i];
+                if (t.biome == biome && t.hilliness == hill && !t.WaterCovered)
                 {
                     return i;
                 }
             }
 
-            Log.Error($"No world tile found with biome {biome.label}");
-            return TileFinder.RandomSettlementTileFor(Faction.OfPlayer);
+            // Failing that, try to find tile of just correct biome and mutate it
+            for (int i = 0; i < tileCount; i++)
+            {
+                Tile t = grid[i];
+                if (t.biome == biome && !t.WaterCovered)
+                {
+                    t.hilliness = hill;
+                    return i;
+                }
+            }
+
+            // Failing that, find a random tile and try to mutate both
+            int fallback = TileFinder.RandomSettlementTileFor(Faction.OfPlayer);
+            Tile tileFallback = grid[fallback];
+            tileFallback.biome = biome;
+            tileFallback.hilliness = hill;
+
+            Log.Warning($"SuperQuicktest: Could not find tile with biome {biome.defName} " +
+                        $"and hilliness {hill}; mutated tile #{fallback}.");
+
+            return fallback;
         }
 
         public static List<Scenario> AllAvailableScenarios()

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Verse;
 using RimWorld;
 using UnityEngine;
+using RimWorld.Planet;
 
 namespace SuperDevQuicktest
 {
@@ -51,6 +52,23 @@ namespace SuperDevQuicktest
                     b => b.label,
                     b => (Action)(() => { settings.selectedBiome = b.defName; })
                 );
+            }
+
+            // Hilliness
+            if (list.ButtonTextLabeled("Terrain", settings.hillinessSelection.ToString()))
+            {
+                List<FloatMenuOption> hills = new List<FloatMenuOption>();
+
+                foreach (Hilliness hill in Enum.GetValues(typeof(Hilliness)))
+                {
+                    if (hill != Hilliness.Undefined)
+                    {
+                        hills.Add(new FloatMenuOption(hill.ToString(),
+                            () => settings.hillinessSelection = hill));
+                    }
+                }
+
+                Find.WindowStack.Add(new FloatMenu(hills));
             }
 
             // Storyteller
