@@ -47,6 +47,13 @@ namespace SuperDevQuicktest
                     Current.Game.World = WorldGenerator.GenerateWorld(worldMapCoverage, GenText.RandomSeedString(), OverallRainfall.Normal, OverallTemperature.Normal, OverallPopulation.Normal, LandmarkDensity.Normal);
 
                     BiomeDef biome = QuicktestUtilities.BiomeDefByName(settings.selectedBiome);
+                    if (biome == null)
+                    {
+                        Log.Warning($"Failed to find biome with name {settings.selectedBiome}. Resetting to Temperate Forest");
+                        settings.selectedBiome = "TemperateForest";
+                        biome = QuicktestUtilities.BiomeDefByName(settings.selectedBiome);
+                    }
+
                     Hilliness hill = settings.hillinessSelection;
                     Find.GameInitData.startingTile = QuicktestUtilities.FindOrCreateTile(biome, hill);
 
