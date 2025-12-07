@@ -17,6 +17,7 @@ namespace SuperDevQuicktest
         public string selectedStoryteller = "Cassandra";
         public float worldMapCoverage = 0.05f;
         public Hilliness hillinessSelection = Hilliness.Flat;
+        public int startHour = 12;
 
         public List<string> biomeBlackList = new List<string>
         {
@@ -37,6 +38,7 @@ namespace SuperDevQuicktest
             Scribe_Values.Look(ref selectedStoryteller, "selectedStoryteller", "Cassandra");
             Scribe_Values.Look(ref worldMapCoverage, "worldMapCoverage", 0.05f);
             Scribe_Values.Look(ref hillinessSelection, "hillinessSelection", Hilliness.Flat);
+            Scribe_Values.Look(ref startHour, "startHour", 12);
             base.ExposeData();
         }
     }

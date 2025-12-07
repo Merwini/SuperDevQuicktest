@@ -21,8 +21,7 @@ namespace SuperDevQuicktest
                 harmony.PatchAll();
             }
 
-            [HarmonyPatch(typeof(Root_Play))]
-            [HarmonyPatch(nameof(Root_Play.SetupForQuickTestPlay))]
+            [HarmonyPatch(typeof(Root_Play), nameof(Root_Play.SetupForQuickTestPlay))]
             public static class Root_play_SetupForQuickTestPlay
             {
                 public static bool Prefix()
@@ -58,7 +57,26 @@ namespace SuperDevQuicktest
 
                     return false;
                 }
-                
+            }
+
+            [HarmonyPatch(typeof(Game), nameof(Game.FinalizeInit))]
+            public static class Game_FinalizeInit
+            {
+                public static void Postfix()
+                {
+                    SuperQuicktestSettings settings = SuperQuicktestMod.settings;
+
+                    int desiredHour = settings.startHour;
+                    if (desiredHour < 0 || desiredHour > 23)
+                    {
+                        desiredHour = 6;
+                    }
+
+                    int offsetHour = (desiredHour - 6 + 24) % 24;
+                    int targetTicks = offsetHour * 2500;
+
+                    Find.TickManager.DebugSetTicksGame(targetTicks);
+                }
             }
         }
     }

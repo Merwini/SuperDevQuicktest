@@ -94,6 +94,12 @@ namespace SuperDevQuicktest
             coverageInt = (int)list.Slider(coverageInt, 5, 100);
             settings.worldMapCoverage = coverageInt / 100f;
 
+            // Start time of day
+            list.Label($"Start hour: {settings.startHour}:00");
+            float startHourTemp = settings.startHour;
+            startHourTemp = list.Slider(startHourTemp, 0f, 23f);
+            settings.startHour = Mathf.RoundToInt(startHourTemp);
+
             // TODO Ideo? Might need separate assembly
 
             list.End();
