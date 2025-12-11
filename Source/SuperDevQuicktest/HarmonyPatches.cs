@@ -22,7 +22,7 @@ namespace SuperDevQuicktest
             }
 
             [HarmonyPatch(typeof(Root_Play), nameof(Root_Play.SetupForQuickTestPlay))]
-            public static class Root_play_SetupForQuickTestPlay
+            public static class Root_Play_SetupForQuickTestPlay
             {
                 public static bool Prefix()
                 {
@@ -62,6 +62,8 @@ namespace SuperDevQuicktest
 
                     Find.Scenario.PostIdeoChosen(); // TODO customize,
 
+                    settings.startedGameWithQuicktest = true;
+
                     return false;
                 }
             }
@@ -73,6 +75,9 @@ namespace SuperDevQuicktest
                 {
                     SuperQuicktestSettings settings = SuperQuicktestMod.settings;
 
+                    if (!settings.startedGameWithQuicktest)
+                        return;
+
                     int desiredHour = settings.startHour;
                     if (desiredHour < 0 || desiredHour > 23)
                     {
@@ -83,6 +88,20 @@ namespace SuperDevQuicktest
                     int targetTicks = offsetHour * 2500;
 
                     Find.TickManager.DebugSetTicksGame(targetTicks);
+
+                    settings.startedGameWithQuicktest = false;
+                }
+            }
+
+            // Hopefully catches any edge cases where player tries to Dev Quicktest and it fails back to the main menu so the flag is not consumed
+            [HarmonyPatch(typeof(MainMenuDrawer), nameof(MainMenuDrawer.Init))]
+            public static class MainMenuDrawer_Init
+            {
+                public static void Postfix()
+                {
+                    SuperQuicktestSettings settings = SuperQuicktestMod.settings;
+
+                    settings.startedGameWithQuicktest = false;
                 }
             }
         }

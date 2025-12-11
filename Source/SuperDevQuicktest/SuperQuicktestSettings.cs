@@ -19,6 +19,8 @@ namespace SuperDevQuicktest
         public Hilliness hillinessSelection = Hilliness.Flat;
         public int startHour = 12;
 
+        public bool startedGameWithQuicktest = false;
+
         public List<string> biomeBlackList = new List<string>
         {
             "MetalHell",
