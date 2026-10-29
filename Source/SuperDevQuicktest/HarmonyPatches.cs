@@ -104,6 +104,25 @@ namespace SuperDevQuicktest
                     settings.startedGameWithQuicktest = false;
                 }
             }
+
+            [HarmonyPatch(typeof(PlayDataLoader), nameof(PlayDataLoader.HotReloadDefs))]
+            public static class PlayDataLoader_HotReloadDefs_Patches
+            {
+                public static void Prefix(out (bool DevPalette, bool GodMode) __state)
+                {
+                    __state = (DebugSettings.devPalette, DebugSettings.godMode);
+                }
+
+                public static void Postfix((bool DevPalette, bool GodMode) __state)
+                {
+                    LongEventHandler.QueueLongEvent(() =>
+                    {
+                        DebugSettings.godMode = __state.GodMode;
+                        DebugSettings.devPalette = __state.DevPalette;
+                        Find.UIRoot.debugWindowOpener.TryOpenOrClosePalette();
+                    }, null, false, null);
+                }
+            }
         }
     }
 }
