@@ -167,6 +167,7 @@ public class HarmonyPatches
             }
         }
 
+        // Without this, throws an error if every colonist's mood is disabled
         [HarmonyPatch(typeof(HistoryAutoRecorderWorker_ColonistMood), nameof(HistoryAutoRecorderWorker_ColonistMood.PullRecord))]
         public static class HistoryAutoRecorderWorker_ColonistMood_Patch
         {
